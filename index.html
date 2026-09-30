@@ -428,6 +428,7 @@
       border: 1px solid rgba(134, 44, 214, 0.1);
       border-radius: 18px;
       padding: 1.25rem 1.15rem;
+      min-width: 0;
     }
     .plain-card h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
     .plain-card p { margin: 0; }
@@ -615,9 +616,9 @@
       .nav-links { display: none; }
       .menu-btn { display: block; }
       .hero-grid, .split, .orbit-wrap, .leader, .final-grid, .foot-grid, .clinics, .media-band { grid-template-columns: 1fr; }
-      .stat-grid, .service-grid, .deliver, .card-grid, .metrics { grid-template-columns: 1fr 1fr; }
-      .card-grid.balanced .plain-card { grid-column: auto; }
-      .steps { grid-template-columns: 1fr 1fr 1fr; }
+      .stat-grid, .service-grid, .deliver, .card-grid, .card-grid.balanced, .metrics { grid-template-columns: 1fr 1fr; }
+      .card-grid.balanced .plain-card:nth-child(n) { grid-column: auto; }
+      .steps { grid-template-columns: 1fr 1fr; }
       .eco, .eco.wide { grid-column: span 6; }
       .hero-visual img, .photo-frame img { height: 360px; }
       .orbit { display: none; }
@@ -625,19 +626,236 @@
       .portrait { position: static; height: 560px; max-width: 420px; }
     }
     @media (max-width: 720px) {
-      .container { width: min(1180px, calc(100% - 2rem)); }
-      .section { padding: 3.5rem 0; }
-      .stat-grid, .service-grid, .deliver, .card-grid, .metrics, .steps, .fields, .dark-fields, .eco-grid { grid-template-columns: 1fr; }
+      .container { width: min(1180px, calc(100% - 1.5rem)); }
+      .section { padding: 3.25rem 0; }
+      .stat-grid, .service-grid, .deliver, .card-grid, .card-grid.balanced, .metrics, .steps, .fields, .dark-fields, .eco-grid, .foot-grid, .clinics { grid-template-columns: 1fr; }
+      .card-grid.balanced .plain-card:nth-child(n) { grid-column: auto; }
       .eco, .eco.wide { grid-column: auto; }
-      .hero { padding-top: calc(var(--header) + 1.8rem); }
-      .hero h1 { max-width: none; }
-      .float-card { left: 0.8rem; }
-      .portrait { position: static; height: 520px; }
+      .hero { padding-top: calc(var(--header) + 1.5rem); }
+      .hero h1 { max-width: none; font-size: clamp(2rem, 9vw, 2.6rem); }
+      .hero .hero-actions, .final .hero-actions { padding-right: 0; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .hero-actions .btn, .final .hero-actions .btn { width: 100%; text-wrap: balance; }
+      .float-card { left: 0.75rem; right: 0.75rem; max-width: none; }
+      .portrait { position: static; height: 460px; max-width: none; }
+      .hero-visual { min-height: 0; }
+      .hero-visual img { height: 240px; }
+      .logo-row span { font-size: 0.8rem; }
+      .approach { align-items: flex-start; }
+      .approach span { line-height: 1.45; }
     }
     @media (prefers-reduced-motion: reduce) {
       .reveal { opacity: 1; transform: none; transition: none; }
       .orbit.spinning .orbit-spin,
       .orbit.spinning .node { animation: none; }
+    }
+
+    /* Visual system */
+    body { overflow-x: clip; }
+    section[id], header[id] { scroll-margin-top: calc(var(--header) + 0.5rem); }
+    h1, h2, h3, p, li, td, th { overflow-wrap: break-word; }
+    .shot { margin: 0; overflow: hidden; }
+    .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .stats {
+      padding: 4.75rem 0;
+      background:
+        radial-gradient(700px 280px at 100% 0%, rgba(166, 101, 228, 0.35), transparent 60%),
+        linear-gradient(155deg, #2a1248 0%, #5b1e91 55%, #7a28c4 100%);
+    }
+    .stats .eyebrow { color: #e9d5ff; }
+    .stats h2 { color: #fff; }
+    .stats .lede { color: rgba(255, 255, 255, 0.82); }
+    .stat {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(8px);
+    }
+    .stat b { color: #fff; font-size: clamp(1.85rem, 3vw, 2.4rem); }
+    .stat p { color: #f5f3ff; }
+    .stat small { color: #ddd6fe; }
+
+    .eco-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+    .eco.feature, .eco.photo-card { padding: 0; overflow: hidden; min-width: 0; }
+    .eco.feature {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(220px, 0.86fr) 1.14fr;
+      gap: 0;
+    }
+    .eco.feature.flip { grid-template-columns: 1.14fr minmax(220px, 0.86fr); }
+    .eco.feature.flip .shot { order: 2; }
+    .eco.feature .shot img { min-height: 260px; }
+    .eco.photo-card { grid-column: span 2; }
+    .eco.photo-card .shot img { height: 190px; }
+    .eco-copy { padding: 1.4rem 1.35rem 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+    .eco .path {
+      display: inline-flex;
+      align-self: flex-start;
+      margin-top: 0.35rem;
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      background: var(--soft-2);
+    }
+
+    .service { padding: 0 0 1.2rem; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+    .service .shot img { height: 176px; }
+    .service .icon { margin: 1rem 1.2rem 0; }
+    .service h3 { margin: 0.75rem 1.2rem 0.7rem; }
+    .service > p, .service ul { margin-left: 1.2rem; margin-right: 1.2rem; }
+
+    .steps { counter-reset: none; }
+    .step .n {
+      display: inline-grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--soft-2);
+    }
+
+    .deliver img { height: 200px; }
+    .deliver article { box-shadow: 0 12px 28px rgba(33, 20, 53, 0.05); }
+
+    .plain-card {
+      border-top: 3px solid var(--primary);
+      box-shadow: 0 12px 28px rgba(33, 20, 53, 0.04);
+    }
+    .card-grid { counter-reset: card; }
+    .plain-card::before {
+      counter-increment: card;
+      content: counter(card, decimal-leading-zero);
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--primary);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    .value-intro {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: center;
+      margin-bottom: 1.4rem;
+    }
+    .value-intro .section-head { margin-bottom: 0; }
+    .value-visual { border-radius: 24px; min-height: 260px; }
+    .value-visual img { height: 280px; }
+
+    .metrics {
+      background: linear-gradient(160deg, #211435, #5b1e91);
+      border-radius: 24px;
+      padding: 1rem;
+    }
+    .metric { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.12); }
+    .metric b { color: #fff; }
+    .metric span { color: #e9d5ff; }
+
+    .mobile-menu.open { max-height: calc(100dvh - 4.5rem); overflow-y: auto; }
+    .wa-float { bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+
+    @media (max-width: 1100px) {
+      .eco-grid { grid-template-columns: 1fr 1fr; }
+      .eco.feature, .eco.photo-card { grid-column: 1 / -1; }
+      .eco.photo-card:nth-child(3),
+      .eco.photo-card:nth-child(4),
+      .eco.photo-card:nth-child(5) { grid-column: auto; }
+      .eco.feature, .eco.feature.flip { grid-template-columns: 1fr; }
+      .eco.feature.flip .shot { order: 0; }
+      .eco.feature .shot img { min-height: 0; height: 240px; }
+      .value-intro { grid-template-columns: 1fr; }
+      .value-visual img { height: 240px; }
+    }
+    @media (max-width: 720px) {
+      .eco-grid, .value-intro { grid-template-columns: 1fr; }
+      .eco.feature,
+      .eco.feature.flip,
+      .eco.photo-card { grid-column: auto; grid-template-columns: 1fr; }
+      .eco.feature.flip .shot { order: 0; }
+      .eco.feature .shot img, .eco.photo-card .shot img, .photo-frame img { height: 220px; min-height: 0; }
+      .hero-visual img { height: 280px; }
+      .service .shot img, .deliver img { height: 200px; }
+      .section-head.center, .section-head.center .lede { text-align: left; }
+      h2, h3 { text-wrap: balance; }
+      .node-list { align-items: stretch; gap: 0.55rem; }
+      .node-list .chip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        min-height: 3.15rem;
+        line-height: 1.3;
+      }
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: 0;
+      }
+      .step {
+        display: grid;
+        grid-template-columns: 2.5rem 1fr;
+        column-gap: 0.75rem;
+        row-gap: 0.15rem;
+        align-items: start;
+        background: #fff;
+        border: 1px solid rgba(134, 44, 214, 0.12);
+        border-radius: 16px;
+        padding: 0.95rem 1rem;
+        position: relative;
+      }
+      .step::before { content: none; }
+      .step .n { grid-row: 1 / span 2; margin-top: 0.1rem; }
+      .step h3, .step p { margin: 0; }
+      .approach { flex-direction: column; align-items: flex-start; gap: 0.45rem; }
+      .approach span { display: block; line-height: 1.55; }
+      .portrait { height: auto; aspect-ratio: 4 / 5; max-width: none; }
+      .node-list { display: grid; grid-template-columns: 1fr 1fr; }
+      .table-wrap { overflow: visible; border: 0; background: transparent; }
+      table, tbody { display: block; width: 100%; min-width: 0; }
+      thead { display: none; }
+      tr {
+        display: block;
+        width: 100%;
+        margin: 0 0 0.75rem;
+        padding: 0.95rem 1rem 0.8rem;
+        background: #fff;
+        border: 1px solid rgba(134, 44, 214, 0.12);
+        border-radius: 16px;
+      }
+      td, td:first-child {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        border: 0;
+        padding: 0.4rem 0;
+        background: transparent;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: normal;
+      }
+      td:first-child { font-size: 1.05rem; padding-bottom: 0.45rem; line-height: 1.3; }
+      td:nth-child(2)::before,
+      td:nth-child(3)::before {
+        display: block;
+        margin-bottom: 0.15rem;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      td:nth-child(2) { background: transparent; }
+      td:nth-child(2)::before { content: "RECOUP Health"; color: var(--primary); }
+      td:nth-child(3)::before { content: "Conventional models"; color: var(--muted); }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .metric { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .metric b { font-size: 1.45rem; }
+      .metric span { font-size: 0.82rem; }
+      .final .hero-actions { padding-right: 0; }
+      .dark-fields { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -818,45 +1036,74 @@
         <p class="lede">From preventive screening to rehabilitation and workplace health, RECOUP Health connects multiple areas of care through one integrated, interdisciplinary ecosystem.</p>
       </div>
       <div class="eco-grid">
-        <article class="eco wide">
-          <span class="num">01 — EPHS</span>
-          <h3>Employee Preventive Health Screening</h3>
-          <p>Establish a meaningful baseline of employee health and identify potential risks early.</p>
-          <p class="path">Screen. Understand. Act.</p>
+        <article class="eco feature">
+          <figure class="shot">
+            <img src="assets/clinic-screening.png" alt="Clinician completing a preventive health screening with an employee" />
+          </figure>
+          <div class="eco-copy">
+            <span class="num">01 — EPHS</span>
+            <h3>Employee Preventive Health Screening</h3>
+            <p>Establish a meaningful baseline of employee health and identify potential risks early.</p>
+            <p class="path">Screen. Understand. Act.</p>
+          </div>
         </article>
-        <article class="eco wide">
-          <span class="num">02 — EPHR</span>
-          <h3>Employee Preventive Health Report</h3>
-          <p>Transform health screening data into personalized, actionable health insights that help employees understand their health and take informed next steps.</p>
-          <p class="path">Data → Insight → Action</p>
+        <article class="eco feature flip">
+          <figure class="shot">
+            <img src="assets/hybrid-care.png" alt="Clinician reviewing health insights with an employee" />
+          </figure>
+          <div class="eco-copy">
+            <span class="num">02 — EPHR</span>
+            <h3>Employee Preventive Health Report</h3>
+            <p>Transform health screening data into personalized, actionable health insights that help employees understand their health and take informed next steps.</p>
+            <p class="path">Data → Insight → Action</p>
+          </div>
         </article>
-        <article class="eco">
-          <span class="num">03</span>
-          <h3>Annual Health &amp; Wellness Programs</h3>
-          <p>Go beyond one-time health camps with structured programs that combine preventive health, education, clinical support, health coaching, rehabilitation, lifestyle management, and ongoing engagement.</p>
+        <article class="eco photo-card">
+          <figure class="shot"><img src="assets/wellness-workshop.png" alt="Employees in a workplace wellness session" /></figure>
+          <div class="eco-copy">
+            <span class="num">03</span>
+            <h3>Annual Health &amp; Wellness Programs</h3>
+            <p>Go beyond one-time health camps with structured programs that combine preventive health, education, clinical support, health coaching, rehabilitation, lifestyle management, and ongoing engagement.</p>
+          </div>
         </article>
-        <article class="eco">
-          <span class="num">04</span>
-          <h3>Lifestyle Management</h3>
-          <p>Support the everyday behaviors that influence long-term health.</p>
-          <p class="path">Nutrition · Movement · Sleep · Stress · Recovery · Health Behaviors</p>
+        <article class="eco photo-card">
+          <figure class="shot"><img src="assets/lifestyle-coaching.png" alt="Nutrition and lifestyle coaching conversation in a sunlit clinic" /></figure>
+          <div class="eco-copy">
+            <span class="num">04</span>
+            <h3>Lifestyle Management</h3>
+            <p>Support the everyday behaviors that influence long-term health.</p>
+            <p class="path">Nutrition · Movement · Sleep · Stress · Recovery · Health Behaviors</p>
+          </div>
         </article>
-        <article class="eco">
-          <span class="num">05</span>
-          <h3>Functional Medicine</h3>
-          <p>A root-cause-oriented approach that considers the interconnected factors contributing to health concerns and supports individualized care.</p>
+        <article class="eco photo-card">
+          <figure class="shot"><img src="assets/hero-workforce.png" alt="Clinical team planning individualized employee care" /></figure>
+          <div class="eco-copy">
+            <span class="num">05</span>
+            <h3>Functional Medicine</h3>
+            <p>A root-cause-oriented approach that considers the interconnected factors contributing to health concerns and supports individualized care.</p>
+          </div>
         </article>
-        <article class="eco wide">
-          <span class="num">06</span>
-          <h3>Integrative Healthcare</h3>
-          <p>Bring interdisciplinary expertise together around the employee.</p>
-          <p class="path">Medical Care · Rehabilitation · Nutrition · Emotional Health · Health Coaching · Ergonomics · Occupational Health</p>
+        <article class="eco feature">
+          <figure class="shot">
+            <img src="assets/clinic-screening.png" alt="Interdisciplinary clinicians consulting together" style="object-position: left center;" />
+          </figure>
+          <div class="eco-copy">
+            <span class="num">06</span>
+            <h3>Integrative Healthcare</h3>
+            <p>Bring interdisciplinary expertise together around the employee.</p>
+            <p class="path">Medical Care · Rehabilitation · Nutrition · Emotional Health · Health Coaching · Ergonomics · Occupational Health</p>
+          </div>
         </article>
-        <article class="eco wide" id="ergonomics">
-          <span class="num">07</span>
-          <h3>Workplace Health &amp; Ergonomics</h3>
-          <p>Move beyond workstation assessment to consider physical, cognitive, participatory, and broader workplace health factors.</p>
-          <p><a class="text-link" href="#services">Explore Ergonomic Workplace Analysis →</a></p>
+        <article class="eco feature flip" id="ergonomics">
+          <figure class="shot">
+            <img src="assets/workplace-ergonomics.png" alt="Specialist reviewing an employee's workstation posture in a modern office" />
+          </figure>
+          <div class="eco-copy">
+            <span class="num">07</span>
+            <h3>Workplace Health &amp; Ergonomics</h3>
+            <p>Move beyond workstation assessment to consider physical, cognitive, participatory, and broader workplace health factors.</p>
+            <p><a class="text-link" href="#services">Explore Ergonomic Workplace Analysis →</a></p>
+          </div>
         </article>
       </div>
     </div>
@@ -870,6 +1117,7 @@
       </div>
       <div class="service-grid">
         <article class="service">
+          <figure class="shot"><img src="assets/clinic-screening.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.6-7 10-7 10z"/></svg>
           </div>
@@ -884,6 +1132,7 @@
           </ul>
         </article>
         <article class="service">
+          <figure class="shot"><img src="assets/wellness-workshop.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14c2-4 4-6 8-6s6 2 8 6"/><path d="M8 14v4M16 14v4M12 8V4"/></svg>
           </div>
@@ -898,6 +1147,7 @@
           </ul>
         </article>
         <article class="service">
+          <figure class="shot"><img src="assets/lifestyle-coaching.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
           </div>
@@ -912,6 +1162,7 @@
           </ul>
         </article>
         <article class="service">
+          <figure class="shot"><img src="assets/hybrid-care.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M9 10h.01M15 10h.01M8.5 15c1.2 1 2.5 1.5 3.5 1.5S14.3 16 15.5 15"/></svg>
           </div>
@@ -926,6 +1177,7 @@
           </ul>
         </article>
         <article class="service">
+          <figure class="shot"><img src="assets/hero-workforce.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
@@ -941,6 +1193,7 @@
           </ul>
         </article>
         <article class="service">
+          <figure class="shot"><img src="assets/workplace-ergonomics.png" alt="" /></figure>
           <div class="icon" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>
           </div>
@@ -955,10 +1208,6 @@
             <li>Early identification and intervention</li>
           </ul>
         </article>
-      </div>
-      <div class="media-band">
-        <img src="assets/clinic-screening.png" alt="Clinician completing a preventive health screening with an employee" />
-        <img src="assets/lifestyle-coaching.png" alt="Nutrition and lifestyle coaching conversation in a sunlit clinic" />
       </div>
     </div>
   </section>
@@ -1049,10 +1298,15 @@
 
   <section class="section" id="value">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Business value</p>
-        <h2>Employee Health. Organizational Value.</h2>
-        <p class="lede">A corporate health program should deliver more than participation numbers. RECOUP Health focuses on creating value across health, productivity, engagement, and long-term workforce sustainability.</p>
+      <div class="value-intro">
+        <div class="section-head">
+          <p class="eyebrow">Business value</p>
+          <h2>Employee Health. Organizational Value.</h2>
+          <p class="lede">A corporate health program should deliver more than participation numbers. RECOUP Health focuses on creating value across health, productivity, engagement, and long-term workforce sustainability.</p>
+        </div>
+        <figure class="shot value-visual">
+          <img src="assets/wellness-workshop.png" alt="Employees taking part in a workplace health program" />
+        </figure>
       </div>
       <div class="card-grid">
         <article class="plain-card"><h3>Healthier Workforce</h3><p>Identify health risks early and create pathways for timely intervention.</p></article>
@@ -1443,7 +1697,7 @@
     }
 
     const revealTargets = document.querySelectorAll(
-      ".hero-grid > div, .section-head, .stat, .eco, .service, .step, .plain-card, .metric, .photo-frame, .orbit, .node-list, .leader > div, .final-grid > div, .table-wrap, .diff, .roi, .approach, .logo-row, .media-band img"
+      ".hero-grid > div, .section-head, .stat, .eco, .service, .step, .plain-card, .metric, .photo-frame, .orbit, .node-list, .leader > div, .final-grid > div, .table-wrap, .diff, .roi, .approach, .logo-row, .value-visual"
     );
     revealTargets.forEach((el) => {
       el.classList.add("reveal");
