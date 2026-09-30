@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Corporate Health | RECOUP Health</title>
-  <meta name="description" content="RECOUP Health partners with organizations on preventive care, rehabilitation, ergonomics, metabolic health, lifestyle management, and emotional health for the modern workforce." />
+  <title>Corporate Health Programs | Workforce Wellness | RECOUP Health</title>
+  <meta name="description" content="Corporate health programs for workforce wellness: preventive care, ergonomics, rehabilitation, and lifestyle management from RECOUP Health in Bangalore." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -241,6 +241,13 @@
       aspect-ratio: 1;
       margin: 0 auto;
     }
+    .orbit-spin { position: absolute; inset: 0; }
+    .orbit.spinning .orbit-spin { animation: orbit-turn 36s linear infinite; }
+    .orbit.spinning .node { animation: node-turn 36s linear infinite; }
+    @keyframes orbit-turn { to { transform: rotate(360deg); } }
+    @keyframes node-turn {
+      to { transform: rotate(calc(var(--i) * 40deg)) translateY(-210px) rotate(calc(var(--i) * -40deg - 360deg)); }
+    }
     .orbit-ring {
       position: absolute;
       inset: 12%;
@@ -375,7 +382,31 @@
     .approach span { color: #ddd6fe; font-size: 0.92rem; }
 
     /* Delivery */
+    .h-pin { position: relative; background: #fff; }
+    .h-pin-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: calc(var(--header) + 1.5rem) 0 2rem;
+    }
+    .h-pin .section-head { margin-bottom: 1.4rem; }
+    .h-pin-window { overflow: hidden; }
     .deliver { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .h-pin .deliver {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+    .h-pin .deliver article { width: clamp(280px, 34vw, 440px); flex: 0 0 auto; }
+    @media (max-width: 759px) {
+      .h-pin-sticky { position: static; height: auto; overflow: visible; padding: 3.5rem 0; }
+      .h-pin-window { overflow: visible; }
+      .h-pin .deliver { display: grid; width: auto; grid-template-columns: 1fr; transform: none !important; }
+      .h-pin .deliver article { width: auto; }
+    }
     .deliver article {
       background: #fff;
       border-radius: 20px;
@@ -567,6 +598,16 @@
     }
     .wa-float:hover { background: #16a34a; }
 
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: none;
+    }
+
     .soft { background: var(--soft); }
     .soft-2 { background: linear-gradient(180deg, #fff, var(--soft)); }
 
@@ -592,6 +633,11 @@
       .hero h1 { max-width: none; }
       .float-card { left: 0.8rem; }
       .portrait { position: static; height: 520px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .orbit.spinning .orbit-spin,
+      .orbit.spinning .node { animation: none; }
     }
   </style>
 </head>
@@ -728,8 +774,8 @@
       <div class="orbit-wrap">
         <div>
           <div class="orbit" aria-hidden="true">
+            <div class="orbit-spin">
             <div class="orbit-ring"></div>
-            <div class="orbit-center">ERGONOMICS</div>
             <span class="node" style="--i:0">Metabolic Health</span>
             <span class="node" style="--i:1">Lifestyle</span>
             <span class="node" style="--i:2">Participatory Ergonomics</span>
@@ -739,6 +785,8 @@
             <span class="node" style="--i:6">Emotional Health</span>
             <span class="node" style="--i:7">Autonomic Regulation</span>
             <span class="node" style="--i:8">Limbic Modulation</span>
+            </div>
+            <div class="orbit-center">ERGONOMICS</div>
           </div>
           <div class="chips node-list">
             <span class="chip">Ergonomics at the center</span>
@@ -937,14 +985,16 @@
     </div>
   </section>
 
-  <section class="section" id="delivery">
+  <section class="h-pin" id="delivery">
+    <div class="h-pin-sticky">
     <div class="container">
       <div class="section-head">
         <p class="eyebrow">Flexible delivery models</p>
         <h2>Healthcare That Fits Your Organization</h2>
         <p class="lede">Different workforces need different ways to access care. One program. Multiple access points.</p>
       </div>
-      <div class="deliver">
+      <div class="h-pin-window">
+      <div class="deliver" id="deliverTrack">
         <article>
           <img src="assets/clinic-screening.png" alt="In-clinic consultation at RECOUP Health" />
           <div>
@@ -974,6 +1024,8 @@
           </div>
         </article>
       </div>
+      </div>
+    </div>
     </div>
   </section>
 
@@ -1350,6 +1402,70 @@
     }
     wireForm(document.getElementById("page-form"));
     wireForm(document.getElementById("footer-form"));
+
+    const motionOk = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const pin = document.getElementById("delivery");
+    const track = document.getElementById("deliverTrack");
+    function layoutPin() {
+      if (!pin || !track) return;
+      if (!motionOk || window.innerWidth < 760) {
+        pin.style.height = "auto";
+        track.style.transform = "none";
+        return;
+      }
+      const extra = Math.max(0, track.scrollWidth - track.parentElement.clientWidth);
+      pin.style.height = (window.innerHeight + extra + 80) + "px";
+      movePin();
+    }
+    function movePin() {
+      if (!pin || !track || !motionOk || window.innerWidth < 760) return;
+      const sticky = pin.querySelector(".h-pin-sticky");
+      const distance = pin.offsetHeight - sticky.offsetHeight;
+      const progress = distance <= 0 ? 0 : Math.min(1, Math.max(0, (window.scrollY - pin.offsetTop) / distance));
+      const max = Math.max(0, track.scrollWidth - track.parentElement.clientWidth);
+      track.style.transform = "translate3d(" + (-progress * max) + "px,0,0)";
+    }
+    layoutPin();
+    window.addEventListener("scroll", movePin, { passive: true });
+    window.addEventListener("resize", layoutPin);
+
+    const orbit = document.querySelector(".orbit");
+    const model = document.getElementById("model");
+    if (orbit && model && motionOk && "IntersectionObserver" in window) {
+      const orbitWatch = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          orbit.classList.add("spinning");
+          orbitWatch.disconnect();
+        });
+      }, { threshold: 0.35 });
+      orbitWatch.observe(model);
+    }
+
+    const revealTargets = document.querySelectorAll(
+      ".hero-grid > div, .section-head, .stat, .eco, .service, .step, .plain-card, .metric, .photo-frame, .orbit, .node-list, .leader > div, .final-grid > div, .table-wrap, .diff, .roi, .approach, .logo-row, .media-band img"
+    );
+    revealTargets.forEach((el) => {
+      el.classList.add("reveal");
+      if (!motionOk) {
+        el.classList.add("in");
+        return;
+      }
+      const order = el.parentElement ? [...el.parentElement.children].indexOf(el) : 0;
+      el.style.transitionDelay = Math.min(Math.max(order, 0), 6) * 70 + "ms";
+    });
+    if (motionOk && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+      revealTargets.forEach((el) => observer.observe(el));
+    } else {
+      revealTargets.forEach((el) => el.classList.add("in"));
+    }
   </script>
 </body>
 </html>
